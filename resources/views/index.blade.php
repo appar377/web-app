@@ -25,6 +25,12 @@
     border-radius: 5px;
   }
 
+  .add__button:hover {
+    background-color: pink;
+    color: white;
+    transition: .3s;
+  }
+
   table {
     width: 100%;
     margin: 0 auto;
@@ -48,20 +54,36 @@
 
   .update {
     width: 60px;
-    height: 35px;
+    line-height: 35px;
     border: 2px solid orange;
     border-radius: 5px;
     background-color: white;
     color: orange;
   }
 
+  .update:hover {
+    color: white;
+    background-color: orange;
+    transition: .3s;
+  }
+
   .delete {
     width: 60px;
-    height: 35px;
+    line-height: 35px;
     border: 2px solid greenyellow;
     border-radius: 5px;
     background-color: white;
     color: greenyellow;
+  }
+
+  .delete:hover {
+    color: white;
+    background-color: greenyellow;
+    transition: .3s;
+  }
+
+  input[type="text"]:focus {
+    outline: 0;
   }
 </style>
 @section('content')
@@ -77,36 +99,43 @@
 </ul>
 @endif
 
-<form action="/" method="POST">
-  <div class="todo">
-    @csrf
-    <input class="add__todo" type="text" name="content">
-    <button class="add__button" type="submit" name="submit">追加</button>
-  </div>
-
-  <table>
-    <tr>
-      <th>作成日</th>
-      <th>タスク名</th>
-      <th>更新</th>
-      <th>削除</th>
-    </tr>
-    @foreach($items as $item)
-    <tr>
-      <td>{{$item->created_at}}</td>
-      <td>
-        <input class="added" type="text" value="{{$item->content}}">
-      </td>
-
-      <td>
-        <button class="update" type="submit" name="update">更新</button>
-      </td>
-
-      <td>
-        <button class="delete" type="submit" name="delete">削除</button>
-      </td>
-    </tr>
-    @endforeach
-  </table>
-  @endsection
+<form class="todo" action="/create" method="POST">
+  @csrf
+  <input class="add__todo" type="text" name="content">
+  <input class="add__button" type="submit" name="submit" value="追加">
 </form>
+
+<table>
+  <tr>
+    <th>作成日</th>
+    <th>タスク名</th>
+    <th>更新</th>
+    <th>削除</th>
+  </tr>
+  @foreach($items as $item)
+  <tr>
+    <td>{{$item->created_at}}</td>
+    <form action="/update" method="POST">
+      @csrf
+      <td>
+        <input type="hidden" name="id" value="{{$item->id}}">
+
+        <input class="added" type="text" name="content" value="{{$item->content}}">
+      </td>
+
+      <td>
+        <input class="update" type="submit" value="更新">
+      </td>
+    </form>
+
+    <form action="/delete" method="POST">
+      @csrf
+      <td>
+        <input type="hidden" name="id" value="{{$item->id}}">
+        <input class="delete" type="submit" value="削除">
+      </td>
+    </form>
+  </tr>
+  @endforeach
+</table>
+@endsection
