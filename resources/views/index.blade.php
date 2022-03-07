@@ -81,7 +81,7 @@
   <div class="todo">
     @csrf
     <input class="add__todo" type="text" name="content">
-    <input class="add__button" type="submit" name="submit" value="追加">
+    <button class="add__button" type="submit" name="submit">追加</button>
   </div>
 
   <table>
